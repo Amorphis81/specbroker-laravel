@@ -1,0 +1,141 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+    @font-face {
+        font-family: Lato;
+        src: url(/fonts/LatoRegular/LatoRegular.woff2) format("woff2"),
+            url(/fonts/LatoRegular/LatoRegular.woff) format("woff"),
+            url(/fonts/LatoRegular/LatoRegular.ttf) format("ttf");
+    }
+    @font-face {
+        font-family: Lato;
+        font-weight: bold;
+        src: url(/fonts/LatoBold/LatoBold.woff2) format("woff2"),
+        url(/fonts/LatoBold/LatoBold.woff) format("woff"),
+        url(/fonts/LatoBold/LatoBold.ttf) format("ttf");
+    }
+    @font-face {
+        font-family: Lato;
+        font-weight: 900;
+        src: url(/fonts/LatoBlack/LatoBlack.woff2) format("woff2"),
+        url(/fonts/LatoBlack/LatoBlack.woff) format("woff"),
+        url(/fonts/LatoBlack/LatoBlack.ttf) format("ttf");
+    }
+    @font-face {
+        font-family: Comissioner;
+        src: url(/fonts/CommissionerRegular/CommissionerRegular.woff2) format("woff2"),
+        url(/fonts/CommissionerRegular/CommissionerRegular.woff) format("woff"),
+        url(/fonts/CommissionerRegular/CommissionerRegular.ttf) format("ttf");
+    }
+    @font-face {
+        font-family: Comissioner;
+        font-weight: bold;
+        src: url(/fonts/CommissionerBold/CommissionerBold.woff2) format("woff2"),
+        url(/fonts/CommissionerBold/CommissionerBold.woff) format("woff"),
+        url(/fonts/CommissionerBold/CommissionerBold.ttf) format("ttf");
+    }
+}
+
+@layer components {
+    .button{
+        @apply p-3 text-sm rounded w-full
+    }
+
+    .check{
+        @apply text-accent border-accent cursor-pointer focus:ring focus:ring-offset-0 focus:ring-accent focus:ring-opacity-50
+    }
+}
+
+.tw-container{
+    @apply container mx-auto max-w-[1232px] px-4
+}
+
+.input{
+    @apply p-3 text-sm border-transparent rounded bg-gray-1 placeholder-gray-2
+}
+
+.tw-button-accent{
+    @apply button bg-accent text-white visited:text-white font-bold
+}
+
+.tw-button-accent-o{
+    @apply button bg-transparent text-accent visited:text-accent font-bold border border-accent
+}
+
+.tw-button-green{
+    @apply button bg-green-1 text-white visited:text-white
+}
+
+.tw-button-o{
+    @apply button font-bold bg-transparent border border-white text-white visited:text-white
+}
+
+.is-invalid{
+    @apply border-red
+}
+
+.required{
+    @apply relative after:content-['*'] after:text-red
+}
+
+.checkbox {
+    @apply rounded check
+}
+
+.radio {
+    @apply check
+}
+
+.tw-shadow-1{
+    box-shadow: 5px 5px 11px rgba(78, 78, 86, 0.09);
+}
+
+.tw-shadow-2{
+    box-shadow: 5px 5px 24px rgba(14, 35, 97, 0.05);
+}
+
+.tw-shadow-3{
+    box-shadow: 9px 9px 30px rgba(14, 35, 97, 0.04);
+}
+
+.tw-shadow-4{
+    text-shadow: 1px 1px 2px rgba(82, 90, 101, 0.23)
+}
+
+.tw-shadow-5 {
+    box-shadow: 0 12px 20px rgba(50, 68, 78, 0.04);
+}
+
+.text-xxs{
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.has-children::after{
+    content: '';
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: -.8rem;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 4px 0 4px;
+    border-color: #32444e transparent transparent transparent;
+}
+
+.bg-img{
+    @apply bg-center bg-no-repeat bg-cover
+}
+
+.filepond--drop-label{
+    border-radius: 0.25rem;
+    background-color: #F5F7FD;
+}
+
+.swiper-pagination-bullet-active{
+    background: #fff!important;
+}
