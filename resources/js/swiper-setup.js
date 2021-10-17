@@ -11,4 +11,21 @@ addEventListener('DOMContentLoaded', () => {
             el: ".swiper-pagination",
         },
     });
+
+    //Single business
+    const thumbsSingleBusiness = new Swiper("[data-name=single-business-swiper-thumbs]", {
+        loop: true,
+        spaceBetween: 23,
+        slidesPerView: 5,
+        freeMode: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+    });
+
+    const swiperSingleBusiness = new Swiper("[data-name=single-business-swiper]", {
+        loop: true,
+        thumbs: {
+            swiper: thumbsSingleBusiness,
+        },
+    });
 })

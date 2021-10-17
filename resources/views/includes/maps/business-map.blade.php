@@ -25,9 +25,10 @@
 
         <div class="flex">
 {{--            Фильтр--}}
-            <form class="w-full max-w-[286px] rounded text-green-1 bg-gray-1 tw-shadow-1" data-name="map-filter"
-            x-data="{open: true}" x-show="open" name="mapFilter">
+            <form class="w-full max-w-[286px] rounded text-green-1 bg-gray-1 tw-shadow-1" data-name="filter"
+                  x-data="{open: true}" x-show="open" name="mapFilter">
                 @csrf
+                <input type="hidden" name="type" value="map">
 {{--                Заголовок фильтра--}}
                 <div class="py-4 px-5 flex items-center justify-between">
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

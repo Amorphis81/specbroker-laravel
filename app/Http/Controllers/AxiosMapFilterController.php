@@ -22,6 +22,15 @@ class AxiosMapFilterController extends Controller
 
         $businesses = $this->businessFilterService->filter($request);
 
-        return $businesses;
+        $filter_type = $request->type;
+
+        if ($filter_type === 'blocks'){
+            return view('includes.business-blocks.business-filter-block', compact('businesses'));
+        }
+
+        if ($filter_type === 'map') {
+            return $businesses;
+        }
+
     }
 }

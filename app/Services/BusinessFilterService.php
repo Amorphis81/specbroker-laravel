@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Business;
+use Debugbar;
 
 Class BusinessFilterService
 {
@@ -44,7 +45,7 @@ Class BusinessFilterService
         }
 
         if($license_type !== '2' ) {
-            $query->where('id', '>', 0);
+            $query->where('with_license', '=', (int)$license_type);
         }
 
         $businesses = (empty($selected_stations) &&

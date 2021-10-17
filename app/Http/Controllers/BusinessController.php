@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
@@ -21,9 +22,10 @@ class BusinessController extends Controller
         dd($request);
     }
 
-    public function show()
+    public function show($business_id)
     {
-        return 'Business show';
+        $business = Business::find($business_id);
+        return view('pages.single-business.index', compact('business'));
     }
 
     public function edit()

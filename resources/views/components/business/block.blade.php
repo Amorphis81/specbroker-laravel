@@ -10,7 +10,7 @@
     'views' => '',
 ])
 
-<a href="{{ route('single') }}" class="relative mb-7 block rounded tw-shadow-2">
+<a href="{{ $link }}" class="relative mb-7 block rounded tw-shadow-2">
 
     @if ( $type === 'sell' )
 

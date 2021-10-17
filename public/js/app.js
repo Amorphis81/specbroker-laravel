@@ -5380,52 +5380,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 
-function mapHandler() {
-  var map = document.querySelector('#mapid'); // if (!map) return
-
+function filterHandler() {
+  //Инициализация карты
+  var map = document.querySelector('#mapid');
+  if (!map) return;
   var mymap = L.map('mapid').setView([55.75399399999374, 37.62209300000001], 10);
   var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(mymap);
-  var markerGroup = L.layerGroup().addTo(mymap);
-  var mapFilter = document.forms.mapFilter;
-  var stationInputs = mapFilter.querySelectorAll('[name=stations]');
-  var objectTypesInputs = mapFilter.querySelectorAll('[name=object_types]');
-  var filterInputs = mapFilter.querySelectorAll('[data-name=filter-input]');
-  var price_from = mapFilter.price_from;
-  var price_to = mapFilter.price_to;
-  var license_type = mapFilter.license_type;
-  var stationInputsIds = {};
-  var objectTypesIds = {};
-  filterInputs.forEach(function (input) {
-    input.addEventListener('change', function () {
-      markerGroup.clearLayers();
-      stationInputs.forEach(function (input) {
-        if (input.type === 'checkbox') stationInputsIds[input.value] = input.checked;
-      });
-      objectTypesInputs.forEach(function (input) {
-        if (input.type === 'checkbox') objectTypesIds[input.value] = input.checked;
-      });
-      console.log(license_type.value);
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/business-map-filter', {
-        stations: stationInputsIds,
-        object_types: objectTypesIds,
-        price_from: price_from.value,
-        price_to: price_to.value,
-        license_type: license_type.value
-      }).then(function (respond) {
-        var businesses = respond['data'];
-        businesses.forEach(function (business) {
-          var businessMarker = "\n                      <img src=\"../images/business-popup.jpg\" alt=\"img\">\n                      <div class=\"mt-2 mb-2 font-bold text-sm text-accent\">".concat(business.name, "</div>\n                      <div class=\"mb-2 flex items-center\">\n                        <svg class=\"mr-2\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                          <path d=\"M9.49908 18.5048L9.43451 18.5692L9.49908 18.6335L10.3871 19.5189L10.4512 19.5829L10.5154 19.5189L15.9682 14.0822L15.9683 14.0821C17.3757 12.6755 18.2487 10.7338 18.2487 8.58948C18.2487 4.29737 14.7588 0.818149 10.4546 0.818149C6.15046 0.818149 2.66056 4.29737 2.66056 8.58948C2.66056 10.732 3.5335 12.6788 4.93593 14.0771C5.07035 14.2111 5.24844 14.2905 5.44917 14.2905C5.8452 14.2905 6.1664 13.9706 6.1664 13.5751C6.1664 13.3733 6.07886 13.1909 5.94722 13.0596C4.80556 11.9213 4.09331 10.3334 4.09331 8.58948C4.09331 5.09345 6.9459 2.2489 10.4529 2.2489C13.96 2.2489 16.8142 5.09348 16.8142 8.58948C16.8142 10.3383 16.1004 11.9229 14.9485 13.0714L9.49908 18.5048Z\" fill=\"#919BA7\" stroke=\"#919BA7\" stroke-width=\"0.181818\"/>\n                          <path d=\"M11.6851 10.1043V10.8517H14.6614V10.1043H14.0823L12.1122 5.13721L10.4511 8.03735L8.79158 5.13721L6.81979 10.1043H6.24243V10.8517H9.21869V10.1043H8.77301L9.20687 8.86549L10.4511 10.9089L11.6969 8.86549L12.1308 10.1043H11.6851Z\" fill=\"#919BA7\"/>\n                        </svg>\n                        <span class=\"text-sm text-gray-5\">\u043C. \u041B\u044E\u0431\u043B\u0438\u043D\u043E</span>\n                      </div>\n                      <div class=\"flex items-center justify-between\">\n                        <div class=\"flex font-black text-accent\"><span class=\"mr-2\">3 500 000 </span>&#8381</div>\n                        <a href=\"#\" target=\"_blank\" rel=\"noopener\" class=\"tw-button-green !text-white max-w-[110px]\">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0435\u0435</a>\n                      </div>");
-          L.marker(JSON.parse(business.coords)).bindPopup(businessMarker).openPopup().addTo(markerGroup);
+  var markerGroup = L.layerGroup().addTo(mymap); //Работа с фильтром
+
+  var mapFilters = document.querySelectorAll('[data-name=filter]');
+  mapFilters.forEach(function (filter) {
+    var type = filter.type.value;
+    var stationInputs = filter.querySelectorAll('[name=stations]');
+    var objectTypesInputs = filter.querySelectorAll('[name=object_types]');
+    var filterInputs = filter.querySelectorAll('[data-name=filter-input]');
+    var price_from = filter.price_from;
+    var price_to = filter.price_to;
+    var license_type = filter.license_type;
+    var stationInputsIds = {};
+    var objectTypesIds = {};
+    filterInputs.forEach(function (input) {
+      input.addEventListener('change', function () {
+        stationInputs.forEach(function (input) {
+          return input.type === 'checkbox' ? stationInputsIds[input.value] = input.checked : '';
         });
+        objectTypesInputs.forEach(function (input) {
+          return input.type === 'checkbox' ? objectTypesIds[input.value] = input.checked : '';
+        });
+        var data = {
+          stations: stationInputsIds || null,
+          object_types: objectTypesIds || null,
+          price_from: price_from ? price_from.value : null,
+          price_to: price_to ? price_to.value : null,
+          license_type: license_type ? license_type.value : null,
+          type: type
+        };
+        axiosHandler('/api/business-map-filter', data, markerGroup, type);
       });
     });
   });
+
+  function axiosHandler(url, data, markerGroup, type) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default().post(url, data).then(function (respond) {
+      markerGroup.clearLayers();
+
+      if (type === 'blocks') {
+        document.querySelector('[data-name=filter-result]').innerHTML = respond['data'];
+      } else {
+        var businesses = respond['data'];
+        businesses.forEach(function (business) {
+          var businessMarker = "\n                          <img src=\"../images/business-popup.jpg\" alt=\"img\">\n                          <div class=\"mt-2 mb-2 font-bold text-sm text-accent\">".concat(business.name, "</div>\n                          <div class=\"mb-2 flex items-center\">\n                            <svg class=\"mr-2\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                              <path d=\"M9.49908 18.5048L9.43451 18.5692L9.49908 18.6335L10.3871 19.5189L10.4512 19.5829L10.5154 19.5189L15.9682 14.0822L15.9683 14.0821C17.3757 12.6755 18.2487 10.7338 18.2487 8.58948C18.2487 4.29737 14.7588 0.818149 10.4546 0.818149C6.15046 0.818149 2.66056 4.29737 2.66056 8.58948C2.66056 10.732 3.5335 12.6788 4.93593 14.0771C5.07035 14.2111 5.24844 14.2905 5.44917 14.2905C5.8452 14.2905 6.1664 13.9706 6.1664 13.5751C6.1664 13.3733 6.07886 13.1909 5.94722 13.0596C4.80556 11.9213 4.09331 10.3334 4.09331 8.58948C4.09331 5.09345 6.9459 2.2489 10.4529 2.2489C13.96 2.2489 16.8142 5.09348 16.8142 8.58948C16.8142 10.3383 16.1004 11.9229 14.9485 13.0714L9.49908 18.5048Z\" fill=\"#919BA7\" stroke=\"#919BA7\" stroke-width=\"0.181818\"/>\n                              <path d=\"M11.6851 10.1043V10.8517H14.6614V10.1043H14.0823L12.1122 5.13721L10.4511 8.03735L8.79158 5.13721L6.81979 10.1043H6.24243V10.8517H9.21869V10.1043H8.77301L9.20687 8.86549L10.4511 10.9089L11.6969 8.86549L12.1308 10.1043H11.6851Z\" fill=\"#919BA7\"/>\n                            </svg>\n                            <span class=\"text-sm text-gray-5\">\u043C. \u041B\u044E\u0431\u043B\u0438\u043D\u043E</span>\n                          </div>\n                          <div class=\"flex items-center justify-between\">\n                            <div class=\"flex font-black text-accent\"><span class=\"mr-2\">3 500 000 </span>&#8381</div>\n                            <a href=\"#\" target=\"_blank\" rel=\"noopener\" class=\"tw-button-green !text-white max-w-[110px]\">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0435\u0435</a>\n                          </div>");
+          L.marker(JSON.parse(business.coords)).bindPopup(businessMarker).openPopup().addTo(markerGroup);
+        });
+      }
+    });
+  }
 }
 
-mapHandler();
+filterHandler();
 
 /***/ }),
 
@@ -5449,6 +5464,21 @@ addEventListener('DOMContentLoaded', function () {
     loop: true,
     pagination: {
       el: ".swiper-pagination"
+    }
+  }); //Single business
+
+  var thumbsSingleBusiness = new swiper__WEBPACK_IMPORTED_MODULE_0__.default("[data-name=single-business-swiper-thumbs]", {
+    loop: true,
+    spaceBetween: 23,
+    slidesPerView: 5,
+    freeMode: true,
+    watchSlidesVisibility: true,
+    watchSlidesProgress: true
+  });
+  var swiperSingleBusiness = new swiper__WEBPACK_IMPORTED_MODULE_0__.default("[data-name=single-business-swiper]", {
+    loop: true,
+    thumbs: {
+      swiper: thumbsSingleBusiness
     }
   });
 });
